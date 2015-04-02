@@ -471,7 +471,7 @@
 		$ php myscript.php
 		qw8Jqw8Jqw8Jqw8Jqw8Jqw8Jqw8Jqw8Jqw8'!nJq
 
-	It seems to be a repetition of string `qw8J`. Is should be the key...
+	It seems to be a repetition of string `qw8J`. It should be the key...
 
 4.	Create a new function like this
 
