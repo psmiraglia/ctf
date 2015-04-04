@@ -8,12 +8,12 @@
 ## Procedure
 
 1.	Just another brute force attack very similar to
-	[Natas15](../natas15.md) and [Natas16](../natas16.md). The difference
+	[Natas15](natas15.md) and [Natas16](natas16.md). The difference
 	here is that no text-based evidence about query execution's result
 	is provided (see commented line in the source code).
 
 2.	Despite this, we can try with a time-based blind SQL injection. We'll
-	reuse solution of [Natas15](../natas15.md) but in this case the
+	reuse solution of [Natas15](natas15.md) but in this case the
 	injected string are
 
 		natas18" AND IF(password LIKE BINARY "%<char>%",SLEEP(15), 1)#
