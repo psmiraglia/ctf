@@ -11,7 +11,7 @@
 
 		$maxid = 640; // 640 should be enough for everyone
 
-	suggests us that `PHPSESSID` may be at least `640`. This number is
+	suggests us that `PHPSESSID` may assume values up to `640`. This number is
 	sufficiently low to allow a brute-force attack against `PHPSESSID`
 	variable in order to perform [Session Hijacking](http://en.wikipedia.org/wiki/Session_hijacking).
 
