@@ -12,8 +12,7 @@
 	we need a significant number of generated PHPSESSID and the try to execute
 	some statistics.
 
-2.	Statistics are executed by Python script
-	(natas19_stats.py)[./scripts/nata19_stats.py]. Run it
+2.	Statistics are executed by Python script [natas19_stats.py](./scripts/nata19_stats.py). Run it
 
 		$ python natas19_stats.py
 		Just a simple analysis: 
