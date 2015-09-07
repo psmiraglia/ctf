@@ -39,3 +39,4 @@
 
 	It seems to work...
 
+[Go to Ex1](./ex1.md) | [Go to Ex3] (./ex3.md)
