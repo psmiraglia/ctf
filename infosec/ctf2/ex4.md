@@ -31,7 +31,7 @@
 
 		http://ctf.infosecinstitute.com/ctf2/exercises/ex4.php?file=foohttpbar
 
-	In both bases, the result is
+	In both cases, the result is
 
 		You are trying to add a remote URL.
 
@@ -53,7 +53,7 @@
 
 	This means that we know now how to write the remote file's URL!!! :-)
 
-4.	In the application's navbar, all the loaded file are named by following a
+4.	In the application's navbar, all the loaded files are named by following a
 	shared format
 
 		file<N>.txt
