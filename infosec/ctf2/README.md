@@ -7,7 +7,7 @@
 * [Level 5](./ex5.md)
 * [Level 6](./ex6.md)
 * [Level 7](./ex7.md)
-* Level 8
+* [Level 8](./ex8.md)
 * Level 9
 * Level 10
 * Level 11
