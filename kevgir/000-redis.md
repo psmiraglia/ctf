@@ -68,7 +68,8 @@ is to exploit the `redis-cli` return messages.
     $ redis-cli -h canyoupwnme CONFIG SET dir "/xxx/yyy"
     (error) ERR Changing directory: No such file or directory
 
-By using a usernames wordlist and a simple Python script we iterate over all
+By using a [usernames wordlist](https://raw.githubusercontent.com/jeanphorn/wordlist/master/usernames.txt)
+and a simple [Python script](./scripts/redis-oracle.py) we iterate over all
 the usernames in order to check all the paths formed as follows
 
     /home/<username>/.ssh
