@@ -21,8 +21,7 @@ Jenkins is reachable on port `9000`!
 ## Information gathering
 
 Jenkins exposes an endpoint (`/people` or `/asynchPeople`) where all the
-defined users are listed. In the target machine, the following users are
-defined
+defined users are listed. In the target machine, users are
 
 *   admin (Jarvis)
 *   anonymous (anonymous)
@@ -69,10 +68,9 @@ Yep! Credentials are `admin/hello`...
 
 Two years ago, I read an interesting post entitled
 [How I hacked Facebook](http://blog.dewhurstsecurity.com/2014/12/09/how-i-hacked-facebook.html).
-It refer to an unprotected Jenkins instance where the author used a Groovy
-script to execute some commands on the server. Why not trying the same?
-
-In the previsour Metasploit search, there is something interesting
+It refers to an unprotected Jenkins instance where the author used a Groovy
+script to execute some commands on the server. Why not trying the same? In the
+previous Metasploit search, there is something interesting
 
     exploit/multi/http/jenkins_script_console
 
