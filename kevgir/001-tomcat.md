@@ -70,3 +70,7 @@ upload a crafted `.WAR` in order to have a reverse TCP shell enabled.
     uid=106(tomcat7) gid=114(tomcat7) groups=114(tomcat7)
 
 Got it!
+
+## Becoming `root`
+
+Work in progress...
