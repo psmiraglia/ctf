@@ -19,16 +19,8 @@ for username in usernames:
     try:
         r.config_set("dir", path)
         paths.append(path)
+        print "Found: %s" % path
     except Exception:
         pass
     print ("Progress: %2.3f%%     \r" % ((100*i)/len(usernames))),
-    i += 1
-
-print "+---------------------------------------------------------------"
-print "| Available paths"
-print "+---------------------------------------------------------------"
-
-i = 1
-for path in paths:
-    print "[%d] %s" % (i, path)
     i += 1
